@@ -1,0 +1,20 @@
+# Crypto configuration for HerbChain Network
+OrdererOrgs:
+  - Name: Orderer
+    Domain: herbchain.example.com
+    EnableNodeOUs: false
+    Specs:
+      - Hostname: orderer
+        SANS:
+          - localhost
+
+PeerOrgs:
+  - Name: HerbChainOrg
+    Domain: herbchain.example.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 1

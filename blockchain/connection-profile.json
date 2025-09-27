@@ -1,0 +1,45 @@
+{
+  "name": "herbchain-network",
+  "version": "1.0.0",
+  "client": {
+    "organization": "HerbChainOrg",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "HerbChainOrg": {
+      "mspid": "HerbChainOrgMSP",
+      "peers": ["peer0.herbchain.example.com"],
+      "certificateAuthorities": ["ca.herbchain.example.com"]
+    }
+  },
+  "peers": {
+    "peer0.herbchain.example.com": {
+      "url": "grpcs://localhost:7051",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.herbchain.example.com",
+        "hostnameOverride": "peer0.herbchain.example.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.herbchain.example.com": {
+      "url": "https://localhost:7054",
+      "caName": "ca-herbchain",
+      "tlsCACerts": {
+        "pem": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

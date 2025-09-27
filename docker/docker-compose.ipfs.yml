@@ -1,0 +1,30 @@
+# Docker Compose for IPFS Node
+version: '3.8'
+
+services:
+  ipfs:
+    build:
+      context: .
+      dockerfile: ipfs.dockerfile
+    container_name: herbchain-ipfs
+    ports:
+      - "4001:4001"     # P2P port
+      - "5001:5001"     # API port
+      - "8080:8080"     # Gateway port
+    volumes:
+      - ipfs_data:/data/ipfs
+      - ipfs_staging:/export
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_PATH=/data/ipfs
+    restart: unless-stopped
+    networks:
+      - herbchain
+
+volumes:
+  ipfs_data:
+  ipfs_staging:
+
+networks:
+  herbchain:
+    external: true
