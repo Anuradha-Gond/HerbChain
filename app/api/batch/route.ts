@@ -1,11 +1,14 @@
+export const runtime = "nodejs"
+
+
 import { type NextRequest, NextResponse } from "next/server"
 import { DatabaseOperations } from "@/lib/database"
-import { blockchain } from "@/lib/blockchain"
-import { ipfs } from "@/lib/ipfs"
 import { verifyToken } from "@/lib/auth-utils"
 
 export async function POST(request: NextRequest) {
   try {
+    const { blockchain } = await import("@/lib/blockchain")
+    const { ipfs } = await import("@/lib/ipfs")
     const token = request.headers.get("authorization")?.replace("Bearer ", "")
     const user = await verifyToken(token)
 
