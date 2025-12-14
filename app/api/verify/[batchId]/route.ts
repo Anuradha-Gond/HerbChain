@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/database"; // adjust path if needed
 
