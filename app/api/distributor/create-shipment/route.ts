@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import { DatabaseOperations } from "@/lib/database"
 import { verifyToken } from "@/lib/auth-utils"
@@ -56,25 +58,4 @@ export async function POST(request: NextRequest) {
       created_at: new Date(),
     }
 
-    await DatabaseOperations.createShipmentRecord(shipmentData)
-
-    // Update batch status to shipped
-    await DatabaseOperations.updateBatchStatus(batchId, "shipped")
-
-    return NextResponse.json({
-      success: true,
-      message: "Shipment created successfully",
-      data: {
-        shipmentId,
-        batchId,
-        destination,
-        transportMode,
-        estimatedDelivery: shipmentData.expected_delivery,
-        status: "in-transit",
-      },
-    })
-  } catch (error) {
-    console.error("Create shipment error:", error)
-    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 })
-  }
-}
+    await DatabaseOperations.cre
