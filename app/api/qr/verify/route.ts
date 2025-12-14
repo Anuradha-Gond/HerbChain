@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import { QRCodeGenerator } from "@/lib/qr-generator"
 
