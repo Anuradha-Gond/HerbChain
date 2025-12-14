@@ -1,9 +1,12 @@
 // IPFS file retrieval API endpoint
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
-import { ipfs } from "@/lib/ipfs"
 
 export async function GET(request: NextRequest) {
   try {
+    const { ipfs } = await import("@/lib/ipfs") // lazy-load inside handler
+
     const { searchParams } = new URL(request.url)
     const hash = searchParams.get("hash")
     const type = searchParams.get("type") // 'file' or 'metadata'
