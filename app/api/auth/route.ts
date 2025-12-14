@@ -1,12 +1,16 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
 import { DatabaseOperations } from "@/lib/database"
 
 const JWT_SECRET = process.env.JWT_SECRET || "herbchain-secret-key"
 
 export async function POST(request: NextRequest) {
   try {
+    // Lazy-load Node-only packages
+    const bcrypt = await import("bcryptjs")
+    const jwt = await import("jsonwebtoken")
+
     const { action, email, password, name, role, phone, address, aadhaarId, licenseNumber } = await request.json()
 
     if (action === "login") {
