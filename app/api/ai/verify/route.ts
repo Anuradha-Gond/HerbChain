@@ -1,8 +1,12 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
-import { AIAuthenticityVerifier, FraudPatternDetector } from "@/lib/ai-authenticity"
 
 export async function POST(request: NextRequest) {
   try {
+    // Lazy-load AI modules inside handler
+    const { AIAuthenticityVerifier, FraudPatternDetector } = await import("@/lib/ai-authenticity")
+
     const formData = await request.formData()
     const image = formData.get("image") as File
     const batchData = JSON.parse(formData.get("batchData") as string)
