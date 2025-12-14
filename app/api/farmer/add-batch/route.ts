@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { DatabaseOperations } from "@/lib/database"
@@ -29,12 +31,12 @@ export async function POST(request: NextRequest) {
     const batchData = {
       id: batchId,
       farmer_id: decoded.userId,
-      farm_id: `farm_${decoded.userId}`, // Default farm for demo
+      farm_id: `farm_${decoded.userId}`,
       herb_type: herbType,
       quantity_kg: quantityKg,
       harvest_date: new Date(),
       cultivation_method: "organic" as const,
-      location: gps || { latitude: 28.6139, longitude: 77.209 }, // Default to Delhi
+      location: gps || { latitude: 28.6139, longitude: 77.209 },
       photos: [],
       status: "harvested" as const,
       created_at: new Date(),
@@ -43,7 +45,6 @@ export async function POST(request: NextRequest) {
 
     const batch = await DatabaseOperations.createBatch(batchData)
 
-    // Return in the expected format
     const responseData = {
       _id: batch._id,
       batchId: batch.id,
