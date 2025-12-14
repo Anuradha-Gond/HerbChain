@@ -58,4 +58,25 @@ export async function POST(request: NextRequest) {
       created_at: new Date(),
     }
 
-    await DatabaseOperations.cre
+    await DatabaseOperations.createShipmentRecord(shipmentData)
+
+    // Update batch status to shipped
+    await DatabaseOperations.updateBatchStatus(batchId, "shipped")
+
+    return NextResponse.json({
+      success: true,
+      message: "Shipment created successfully",
+      data: {
+        shipmentId,
+        batchId,
+        destination,
+        transportMode,
+        estimatedDelivery: shipmentData.expected_delivery,
+        status: "in-transit",
+      },
+    })
+  } catch (error) {
+    console.error("Create shipment error:", error)
+    return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 })
+  }
+}
