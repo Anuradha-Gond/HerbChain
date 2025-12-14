@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { DatabaseOperations } from "@/lib/database"
