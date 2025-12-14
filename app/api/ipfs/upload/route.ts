@@ -1,10 +1,15 @@
-// IPFS file upload API endpoint
+// Force Node runtime to allow Buffer, crypto, etc.
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
-import { ipfs } from "@/lib/ipfs"
 import { verifyToken } from "@/lib/auth-utils"
 
 export async function POST(request: NextRequest) {
   try {
+    // Lazy-load IPFS inside handler
+    const { ipfs } = await import("@/lib/ipfs")
+
+    // Verify user
     const token = request.headers.get("authorization")?.replace("Bearer ", "")
     const user = await verifyToken(token)
 
@@ -12,6 +17,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    // Get form data
     const formData = await request.formData()
     const file = formData.get("file") as File
     const fileType = formData.get("fileType") as string // 'image', 'document', 'lab-report'
@@ -21,7 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 })
     }
 
-    // Convert file to buffer
+    // Convert file to buffer inside handler
     const buffer = Buffer.from(await file.arrayBuffer())
 
     // Upload file to IPFS
@@ -40,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Upload metadata to IPFS
     const metadataHash = await ipfs.uploadJSON(metadataObj)
 
-    // Pin both files to ensure availability
+    // Pin files
     await ipfs.pinFile(fileHash)
     await ipfs.pinFile(metadataHash)
 
