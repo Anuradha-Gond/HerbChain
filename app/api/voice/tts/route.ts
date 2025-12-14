@@ -1,4 +1,5 @@
-// Text-to-Speech API endpoint for server-side TTS
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
@@ -27,56 +28,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to generate speech" }, { status: 500 })
   }
 }
-
-// Example integration with Google Cloud TTS (commented out)
-/*
-import { TextToSpeechClient } from '@google-cloud/text-to-speech'
-
-const client = new TextToSpeechClient({
-  keyFilename: process.env.GOOGLE_CLOUD_KEY_FILE,
-  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-})
-
-export async function POST(request: NextRequest) {
-  try {
-    const { text, language = "en-US" } = await request.json()
-
-    const [response] = await client.synthesizeSpeech({
-      input: { text },
-      voice: { 
-        languageCode: language,
-        name: getVoiceName(language),
-        ssmlGender: 'NEUTRAL'
-      },
-      audioConfig: { audioEncoding: 'MP3' },
-    })
-
-    // Save audio to temporary storage or return base64
-    const audioBase64 = response.audioContent?.toString('base64')
-    
-    return NextResponse.json({
-      success: true,
-      audioData: audioBase64,
-      contentType: 'audio/mpeg'
-    })
-
-  } catch (error) {
-    console.error("TTS error:", error)
-    return NextResponse.json({ error: "Failed to generate speech" }, { status: 500 })
-  }
-}
-
-function getVoiceName(language: string): string {
-  const voiceMap: Record<string, string> = {
-    'en-US': 'en-US-Wavenet-D',
-    'hi-IN': 'hi-IN-Wavenet-A',
-    'mr-IN': 'mr-IN-Wavenet-A',
-    'ta-IN': 'ta-IN-Wavenet-A',
-    'te-IN': 'te-IN-Standard-A',
-    'kn-IN': 'kn-IN-Wavenet-A',
-    'gu-IN': 'gu-IN-Wavenet-A',
-    'bn-IN': 'bn-IN-Wavenet-A',
-  }
-  return voiceMap[language] || voiceMap['en-US']
-}
-*/
