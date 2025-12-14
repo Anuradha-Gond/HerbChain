@@ -1,3 +1,5 @@
+export const runtime = "nodejs"
+
 import { type NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
 import { DatabaseOperations } from "@/lib/database"
@@ -20,7 +22,6 @@ export async function GET(request: NextRequest) {
 
     const batches = await DatabaseOperations.getBatchesByFarmer(decoded.userId)
 
-    // Transform to expected format
     const responseData = batches.map((batch) => ({
       _id: batch._id,
       batchId: batch.id,
