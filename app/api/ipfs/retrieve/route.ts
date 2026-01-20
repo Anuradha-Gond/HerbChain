@@ -1,5 +1,6 @@
 // IPFS file retrieval API endpoint
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 import { type NextRequest, NextResponse } from "next/server"
 
@@ -16,31 +17,24 @@ export async function GET(request: NextRequest) {
     }
 
     if (type === "metadata") {
-      // Return metadata as JSON
       const data = await ipfs.getFile(hash)
       const metadata = JSON.parse(data.toString())
       return NextResponse.json(metadata)
-    } else {
-      // Return file data
-      const fileData = await ipfs.getFile(hash)
-
-      // Determine content type based on file extension or metadata
-      let contentType = "application/octet-stream"
-      if (hash.includes(".jpg") || hash.includes(".jpeg")) {
-        contentType = "image/jpeg"
-      } else if (hash.includes(".png")) {
-        contentType = "image/png"
-      } else if (hash.includes(".pdf")) {
-        contentType = "application/pdf"
-      }
-
-      return new NextResponse(fileData, {
-        headers: {
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=31536000", // Cache for 1 year
-        },
-      })
     }
+
+    const fileData = await ipfs.getFile(hash)
+
+    let contentType = "application/octet-stream"
+    if (hash.endsWith(".jpg") || hash.endsWith(".jpeg")) contentType = "image/jpeg"
+    else if (hash.endsWith(".png")) contentType = "image/png"
+    else if (hash.endsWith(".pdf")) contentType = "application/pdf"
+
+    return new NextResponse(fileData, {
+      headers: {
+        "Content-Type": contentType,
+        "Cache-Control": "public, max-age=31536000",
+      },
+    })
   } catch (error) {
     console.error("IPFS retrieval error:", error)
     return NextResponse.json({ error: "Failed to retrieve from IPFS" }, { status: 500 })
