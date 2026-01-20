@@ -3,7 +3,7 @@ export const runtime = "nodejs"
 import { type NextRequest, NextResponse } from "next/server"
 import { DatabaseOperations } from "@/lib/database"
 import { verifyToken } from "@/lib/auth-utils"
-import { ipfs } from "@/lib/ipfs"
+//import { ipfs } from "@/lib/ipfs"
 
 export async function POST(request: NextRequest) {
   try {
